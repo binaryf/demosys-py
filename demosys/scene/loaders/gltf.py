@@ -11,7 +11,7 @@ import moderngl as mgl
 from OpenGL import GL
 from PIL import Image
 
-from pyrr import matrix44, Matrix44, quaternion
+from pyrr import matrix44, quaternion
 
 from demosys import context
 from demosys.opengl import Texture2D
@@ -209,7 +209,8 @@ class GLTF2(SceneLoader):
         self.scene.nodes.append(node)
 
         if meta.matrix is not None:
-            node.matrix = Matrix44(value=meta.matrix)
+            node.matrix = numpy.array(meta.matrix, dtype=numpy.float32)
+            node.matrix.shape = (4, 4)
 
         if meta.mesh is not None:
             # Since we split up meshes with multiple primitives, this can be a list
@@ -611,13 +612,16 @@ class GLTFNode:
         self.scale = data.get('scale')
 
         if self.matrix is None:
-            self.matrix = matrix44.create_identity()
+            self.matrix = matrix44.create_identity(dtype=numpy.float32)
+
         if self.translation is not None:
-            self.matrix = matrix44.create_from_translation(self.translation)
+            self.matrix = matrix44.create_from_translation(self.translation, dtype=numpy.float32)
+
         if self.rotation is not None:
             q = quaternion.create(self.rotation[0], self.rotation[1], self.rotation[2], self.rotation[3])
-            m = matrix44.create_from_quaternion(q)
+            m = matrix44.create_from_quaternion(q, dtype=numpy.float32)
             self.matrix = matrix44.multiply(m, self.matrix)
+
         if self.scale is not None:
             self.matrix = matrix44.multiply(matrix44.create_from_scale(self.scale), self.matrix)
 

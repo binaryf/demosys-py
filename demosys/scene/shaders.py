@@ -37,7 +37,7 @@ class MeshShader:
         :param modelview: The modelview matrix
         :return: Normal matrix
         """
-        normal_m = Matrix33.from_matrix44(modelview)
+        normal_m = Matrix33.from_matrix44(modelview, dtype='f4')
         normal_m = normal_m.inverse
         normal_m = normal_m.transpose()
         return normal_m
@@ -64,9 +64,9 @@ class ColorShader(MeshShader):
             else:
                 self.shader.uniform("color", (1.0, 1.0, 1.0, 1.0))
 
-        self.shader.uniform("m_proj", proj_mat.astype('f4').tobytes())
-        self.shader.uniform("m_mv", view_mat.astype('f4').tobytes())
-        self.shader.uniform("m_normal", m_normal.astype('f4').tobytes())
+        self.shader.uniform("m_proj", proj_mat.tobytes())
+        self.shader.uniform("m_mv", view_mat.tobytes())
+        self.shader.uniform("m_normal", m_normal.tobytes())
 
         mesh.vao.draw(self.shader)
 
@@ -101,9 +101,9 @@ class TextureShader(MeshShader):
         mesh.material.mat_texture.texture.use()
         self.shader.uniform("texture0", 0)
 
-        self.shader.uniform("m_proj", proj_mat.astype('f4').tobytes())
-        self.shader.uniform("m_mv", view_mat.astype('f4').tobytes())
-        self.shader.uniform("m_normal", m_normal.astype('f4').tobytes())
+        self.shader.uniform("m_proj", proj_mat.tobytes())
+        self.shader.uniform("m_mv", view_mat.tobytes())
+        self.shader.uniform("m_normal", m_normal.tobytes())
 
         mesh.vao.draw(self.shader)
 
@@ -129,8 +129,8 @@ class FallbackShader(MeshShader):
 
     def draw(self, mesh, proj_mat, view_mat):
 
-        self.shader.uniform("m_proj", proj_mat.astype('f4').tobytes())
-        self.shader.uniform("m_mv", view_mat.astype('f4').tobytes())
+        self.shader.uniform("m_proj", proj_mat.tobytes())
+        self.shader.uniform("m_mv", view_mat.tobytes())
 
         if mesh.material:
             self.shader.uniform("color", tuple(mesh.material.color[0:3]))

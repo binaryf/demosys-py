@@ -152,16 +152,17 @@ class Effect:
             ratio or self.window_aspect,
             near,
             far,
+            dtype='f4',
         )
 
     def create_transformation(self, rotation=None, translation=None):
         """Convenient transformation method doing rotations and translation"""
         mat = None
         if rotation is not None:
-            mat = Matrix44.from_eulers(Vector3(rotation))
+            mat = matrix44.create_from_eulers(Vector3(rotation), dtype='f4')
 
         if translation is not None:
-            trans = matrix44.create_from_translation(Vector3(translation))
+            trans = matrix44.create_from_translation(Vector3(translation), dtype='f4')
             if mat is None:
                 mat = trans
             else:
@@ -177,7 +178,5 @@ class Effect:
         :param modelview: The modelview matrix
         :return: Normal matrix
         """
-        normal_m = Matrix33.from_matrix44(modelview)
-        normal_m = normal_m.inverse
-        normal_m = normal_m.transpose()
-        return normal_m
+        normal_m = Matrix33.from_matrix44(modelview, dtype='f4')
+        return normal_m.inverse.transpose()

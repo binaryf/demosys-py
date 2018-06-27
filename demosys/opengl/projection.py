@@ -29,7 +29,10 @@ class Projection:
         self.near = near or self.near
         self.far = far or self.far
 
-        self.matrix = Matrix44.perspective_projection(self.fov, self.aspect_ratio, self.near, self.far)
+        self.matrix = Matrix44.perspective_projection(
+            self.fov, self.aspect_ratio, self.near, self.far,
+            dtype='f4',
+        )
 
     def tobytes(self):
         return self.matrix.astype('f4').tobytes()

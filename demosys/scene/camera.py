@@ -100,12 +100,12 @@ class Camera:
         x = vector.normalise(vector3.cross(vector.normalise(up), z))
         y = vector3.cross(z, x)
 
-        translate = matrix44.create_identity()
+        translate = matrix44.create_identity(dtype='f4')
         translate[3][0] = -pos.x
         translate[3][1] = -pos.y
         translate[3][2] = -pos.z
 
-        rotate = matrix44.create_identity()
+        rotate = matrix44.create_identity(dtype='f4')
         rotate[0][0] = x[0]  # -- X
         rotate[1][0] = x[1]
         rotate[2][0] = x[2]

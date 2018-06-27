@@ -9,6 +9,7 @@ class Node:
         self.camera = camera
         self.mesh = mesh
         self.matrix = matrix
+        self.matrix2 = matrix44.create_identity(dtype='f4')
         self.children = []
 
     def add_child(self, child):
@@ -16,7 +17,7 @@ class Node:
 
     def draw(self, m_proj, m_mv):
         if self.matrix is not None:
-            m_mv = matrix44.multiply(self.matrix, m_mv)
+            m_mv = matrix44.multiply(self.matrix, m_mv, out=self.matrix2)
 
         if self.mesh:
             self.mesh.draw(m_proj, m_mv)
@@ -26,7 +27,7 @@ class Node:
 
     def draw_bbox(self, m_proj, m_mv, shader, vao):
         if self.matrix is not None:
-            m_mv = matrix44.multiply(self.matrix, m_mv)
+            m_mv = matrix44.multiply(self.matrix, m_mv, out=self.matrix2)
 
         if self.mesh:
             self.mesh.draw_bbox(m_proj, m_mv, shader, vao)

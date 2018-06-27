@@ -39,8 +39,8 @@ class Scene:
     def draw_bbox(self, m_proj, m_mv, all=True):
         """Draw scene and mesh bounding boxes"""
         # Scene bounding box
-        self.bbox_shader.uniform("m_proj", m_proj.astype('f4').tobytes())
-        self.bbox_shader.uniform("m_mv", m_mv.astype('f4').tobytes())
+        self.bbox_shader.uniform("m_proj", m_proj.tobytes())
+        self.bbox_shader.uniform("m_mv", m_mv.tobytes())
         self.bbox_shader.uniform("bb_min", self.bbox_min.astype('f4').tobytes())
         self.bbox_shader.uniform("bb_max", self.bbox_max.astype('f4').tobytes())
         self.bbox_shader.uniform("color", (1.0, 0.0, 0.0))
